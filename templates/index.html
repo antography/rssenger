@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>No Feed</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/css/universal-parallax.min.css">
+  </head>
+  <body>
+    <section>
+      <section class="hero is-fullheight">
+        <div class="hero-head">
+          <header class="navbar">
+            <div class="container">
+              <div class="navbar-brand">
+                <a class="navbar-item">
+                  God this is stupid
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenuHeroC">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </div>
+              <div id="navbarMenuHeroC" class="navbar-menu">
+                <div class="navbar-end">
+                  <a class="navbar-item is-active" id="myroom">
+                    No Feed
+                  </a>
+                  <a class="navbar-item" id="myuser">
+                    No User
+                  </a>
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+        <div class="hero-body">
+          <div class="container">
+            <div class="columns">
+              <div class="column is-3">
+                <a role="button" class="menu-burger nobile" aria-label="menu" aria-expanded="false">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+                <aside class="menu mobile-hidden yesbile">
+                  <ul class="menu-list">
+                    <p class="menu-label"> Controls</p>
+                    <li><input type="text" class="input is-small" id="mkjroom" placeholder="Make/join feed"></li>
+                    <li><input type="text" class="input is-small" id="username" placeholder="Username"></li>
+                    <li><div class="field has-addons">
+                        <p class="control is-expanded">
+                            <a class="button is-success is-small"  id="login">
+                            Login
+                            </a>
+                        </p>
+                        <p class="control is-expanded">
+                            <a class="button is-warning is-small "  id="logout">
+                            Logout
+                            </a>
+                        </p>
+                        </div>
+                    </li>
+                    <br>
+                    <li><div class="field has-addons ">
+                        <p class="control is-expanded">
+                            <input type="text"  class="input is-small" id="dermessage" placeholder="Message">
+                        </p>
+                        <p class="control ">
+                            <a class="button is-info is-small "  id="gosendmsg">
+                            Send
+                            </a>
+                        </p>
+                        </div>
+                    </li>
+                    <br>
+
+                    <li><textarea class="textarea" id="infozone" name="infozone" rows="10" disabled></textarea></li>
+                    <li><a class="button is-info is-small"  id="clear">Clear</a></li>
+                  </ul>
+  
+                </aside>
+              </div>
+              <div class="column">
+                <textarea class="textarea" id="msgzone" name="msgzone" style="min-height: 80vh; max-height: 80vh;" disabled></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-foot">
+          <div class="container">
+            <p>©2020 Antography</p>
+          </div>
+          <br>
+        </div>
+      </section>
+      <div class="parallax" data-parallax-image="/static/img/rDrEEDI.jpg"></div>
+    </section>
+  </body>
+</html>
+
+
+<body>
+    
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script src="/static/script.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="/static/scripts/universal-parallax.min.js"></script>
+  <script>
+      new universalParallax().init({
+	speed: 5.0
+});
+  </script>
+</body>
