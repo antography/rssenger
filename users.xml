@@ -1,0 +1,19 @@
+<rss version="2.0">
+    <channel>
+    <title>rssenger</title>
+    <link>https://www.example.com</link>
+    <description>God's wrath cometh down upon thy github</description>
+        <item>
+            <title>testuser</title>
+            <author>testuser@anto.gg</author> 
+            <comments>$2y$12$9Z4CY9dg0IU9PBUIavCPA.x3CeOEBwEOZBurCFfAvHF18/dSpgKO.</comments>
+            <description>sadsad</description>
+        </item>
+        <item>
+            <title>testuser2</title>
+            <author>testuser2@anto.gg</author> 
+            <comments>$2y$12$9Z4CY9dg0IU9PBUIavCPA.x3CeOEBwEOZBurCFfAvHF18/dSpgKO.</comments>
+            <description>sadsad</description>
+        </item>
+    </channel>
+</rss>

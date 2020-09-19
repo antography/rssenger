@@ -1,8 +1,0 @@
-<rss version="2.0">
-<channel>
-  <title>rssenger</title>
-  <link>https://www.example.com</link>
-  <description>God's wrath cometh down upon thy github</description>
-<item><title>message</title><username>user1</username><description>uthyfrdasddsadasda</description><msgid>1dfbd63cfa3b11eabe6e309c2381a1e8</msgid></item><item><title>message</title><username>user1</username><description>uthyfrdasddsadasda</description><msgid>1e49f9cdfa3b11ea8d12309c2381a1e8</msgid></item><item><title>message</title><username>user1</username><description>uthyfrdasddsadasda</description><msgid>1e7f8588fa3b11eabc32309c2381a1e8</msgid></item></channel>
-
-</rss>

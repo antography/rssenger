@@ -5,6 +5,9 @@ document.getElementById("clear").addEventListener("click", clear)
 document.getElementById("login").addEventListener("click", login)
 document.getElementById("logout").addEventListener("click", logout)
 
+document.getElementById("usersignin").addEventListener("click", signin)
+document.getElementById("usersignup").addEventListener("click", signout)
+
 var errorbox = document.getElementById("infozone")
 var messgbox = document.getElementById("msgzone")
 var inroom = false
@@ -71,6 +74,28 @@ socket.on('remRoom', data => {
     myuser = ""
 
 });
+
+
+function signin(){
+    const Http = new XMLHttpRequest();
+    const url='/login';
+    var params = 'uname='+document.getElementById("uname").value + '&password=' + document.getElementById("password").value;
+    
+    Http.open("POST", url, true);
+    Http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    Http.send(params);
+
+    Http.onreadystatechange = (e) => {
+    console.log(Http.responseText)
+    }
+}
+function signup(){
+
+}
+function signout(){
+
+}
+
 
 function login(){
     if (inroom == true){
