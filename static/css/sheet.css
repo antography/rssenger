@@ -1,3 +1,7 @@
+.alwaysgone{
+  display: none;
+}
+
 a.disabled {
   pointer-events: none;
 }

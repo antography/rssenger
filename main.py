@@ -1,9 +1,11 @@
 import flask
-from flask import Flask, render_template, request, session, jsonify, send_file
-from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
+from flask import Flask, render_template, request, session, jsonify, send_file, redirect
+from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms, disconnect
 import flask_login
+from flask_login import current_user, login_required
 
-import bcrypt
+import bcrypt, functools
+from functools import wraps
 import uuid
 import json
 import os
@@ -77,29 +79,47 @@ def request_loader(request):
     user.is_authenticated =  bcrypt.checkpw(request.form['password'].encode('utf-8'),users[email]['userpass'].encode('utf-8'))
     return user
 
-@socketio.on('join')
-def on_join(data):
-    username = data['username']
-    room = data['room']
-    join_room(room)
-    send(username + ' has entered the room ' + room, room=room)
-    session['username'] = username
-    emit("setRoom", room)
-    emit("setUser", username)
+def authenticated_only(f):
+    print("spo,etjogm ja[[emd")
+    @functools.wraps(f)
+    def wrapped(*args, **kwargs):
+        if not current_user.is_authenticated:
+            disconnect()
+        else:
+            return f(*args, **kwargs)
+    return wrapped
 
+@socketio.on('join')
+@authenticated_only
+def on_join(data):
+    #print(flask_login.current_user.id)
+    print (current_user)
+    if current_user.is_authenticated:
+        username = flask_login.current_user.id
+        room = data['room']
+        join_room(room)
+        send(username + ' has entered the room ' + room, room=room)
+        emit("setRoom", room)
+        emit("setUser", username)
+    else:
+        return False
 @socketio.on('leave')
+@authenticated_only
 def on_leave(data):
-    username = data['username']
+    username = flask_login.current_user.id
     room = data['room']
     leave_room(room)
     send(username + ' has left the room '+ room, room=room)
     emit("remRoom", room)
-    session.pop('username', None)
     
 @socketio.on('message')
+@authenticated_only
 def handle_message(message):
+    if not current_user.is_authenticated:
+        send("Not logged in")
+        return False
     mainroom = rooms()[1]
-
+    username = flask_login.current_user.id
     reqfeed = "./feeds/" + mainroom + ".xml"
     msgid = str(uuid.uuid1().hex)
     if os.path.isfile(reqfeed):
@@ -111,7 +131,7 @@ def handle_message(message):
         et.SubElement(root[0][-1], 'title')
         root[0][-1][-1].text = "message"
         et.SubElement(root[0][-1], 'username')
-        root[0][-1][-1].text = session['username']
+        root[0][-1][-1].text = username
         et.SubElement(root[0][-1], 'description')
         root[0][-1][-1].text = message
         et.SubElement(root[0][-1], "msgid")
@@ -128,7 +148,7 @@ def handle_message(message):
         et.SubElement(root[0][-1], 'title')
         root[0][-1][-1].text = "message"
         et.SubElement(root[0][-1], 'username')
-        root[0][-1][-1].text = session['username']
+        root[0][-1][-1].text = username
         et.SubElement(root[0][-1], 'description')
         root[0][-1][-1].text = message
         

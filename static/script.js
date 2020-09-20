@@ -6,7 +6,7 @@ document.getElementById("login").addEventListener("click", login)
 document.getElementById("logout").addEventListener("click", logout)
 
 document.getElementById("usersignin").addEventListener("click", signin)
-document.getElementById("usersignup").addEventListener("click", signout)
+document.getElementById("userlogout").addEventListener("click", signout)
 
 var errorbox = document.getElementById("infozone")
 var messgbox = document.getElementById("msgzone")
@@ -28,6 +28,8 @@ socket.on('close', function()
     errorbox.value = "Socket closed" + "\n" + errorbox.value;
     myroom = ""
     myuser = ""
+    document.getElementById('uname').disabled = false;
+    document.getElementById('password').disabled = false;
 });
 socket.on('error', function()
 {
@@ -38,6 +40,8 @@ socket.on('error', function()
     errorbox.value = "Socket error" + "\n" + errorbox.value;
     myroom = ""
     myuser = ""
+    document.getElementById('uname').disabled = false;
+    document.getElementById('password').disabled = false;
 });
 
 socket.on('getnewmsg', data => {
@@ -86,14 +90,48 @@ function signin(){
     Http.send(params);
 
     Http.onreadystatechange = (e) => {
-    console.log(Http.responseText)
+        var response = Http.responseText
+
+        if (response == 'Bad login'){
+            errorbox.value = "Bad login" + "\n" + errorbox.value;
+        } else if (response == "Logged in"){
+            errorbox.value = "Logged in" + "\n" + errorbox.value;
+            document.getElementById("myuser").innerHTML = document.getElementById("uname").value
+            document.getElementById('uname').disabled = true;
+            document.getElementById('password').disabled = true;
+            document.getElementById('password').value = "";
+            location.reload()
+
+        }
     }
+    
 }
 function signup(){
 
 }
 function signout(){
+    const Http = new XMLHttpRequest();
+    const url='/logout';
+    Http.open("GET", url, true);
+    Http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    Http.send();
 
+    Http.onreadystatechange = (e) => {
+        var response = Http.responseText
+
+        if (response == 'Logged out'){
+            errorbox.value = "Logged out" + "\n" + errorbox.value;
+            document.getElementById("myuser").innerHTML = "No user"
+            document.getElementById('uname').disabled = false;
+            document.getElementById('password').disabled = false;
+            document.getElementById('password').value = "";
+            location.reload()
+        } else{
+            errorbox.value = "Something bad happened" + "\n" + errorbox.value;
+            
+
+        }
+    }
 }
 
 
@@ -105,11 +143,9 @@ function login(){
         var info = revaluserroom()
         if (info[1] == ""){
             errorbox.value = "EMPTY FEED" + "\n" + errorbox.value
-        }else if (info[0] == ""){
-            errorbox.value = "EMPTY USERNAME" + "\n" + errorbox.value
         }
         else {
-            socket.emit("join", {"username":info[0], "room":info[1]})
+            socket.emit("join", {"username":"", "room":info[1]})
         }
         messgbox.value = ""
     }
@@ -143,9 +179,8 @@ function revalmsg(){
 }
 
 function revaluserroom(){
-    var username = document.getElementById("username").value;
     var mkjroom = document.getElementById("mkjroom").value;
-    var reval = [ username, mkjroom]
+    var reval = [ "", mkjroom]
     return reval
 }
 
