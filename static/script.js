@@ -1,4 +1,3 @@
-
 document.getElementById("gosendmsg").addEventListener("click", sendmsg)
 document.getElementById("clear").addEventListener("click", clear)
 
@@ -48,7 +47,7 @@ socket.on('getnewmsg', data => {
     fetch("/" + "getmsg"+ "/" +myroom+ "/" + data).then(res => res.json()).then(d => { 
         console.log(d) 
         var obj = d
-        messgbox.value =  "[" + obj.msguser + "@rssenger " + myroom + "]$ " + obj.msgcont + "\n"+ messgbox.value 
+        messgbox.value =  "[" + obj.msguser + "@" + myroom + "]$ " + obj.msgcont + "\n"+ messgbox.value 
     }) 
 });
 
@@ -79,7 +78,6 @@ socket.on('remRoom', data => {
 
 });
 
-
 function signin(){
     const Http = new XMLHttpRequest();
     const url='/login';
@@ -90,21 +88,22 @@ function signin(){
     Http.send(params);
 
     Http.onreadystatechange = (e) => {
-        var response = Http.responseText
+        if (Http.readyState === 4) {
+            var response = Http.responseText
+            console.log(response)
+            if (response != 'Logged in'){
+                errorbox.value = "Bad login or Unknown" + "\n" + errorbox.value;
+            } else {
+                errorbox.value = "Logged in" + "\n" + errorbox.value;
+                document.getElementById("myuser").innerHTML = document.getElementById("uname").value
+                document.getElementById('uname').disabled = true;
+                document.getElementById('password').disabled = true;
+                document.getElementById('password').value = "";
+                location.reload()
 
-        if (response == 'Bad login'){
-            errorbox.value = "Bad login" + "\n" + errorbox.value;
-        } else if (response == "Logged in"){
-            errorbox.value = "Logged in" + "\n" + errorbox.value;
-            document.getElementById("myuser").innerHTML = document.getElementById("uname").value
-            document.getElementById('uname').disabled = true;
-            document.getElementById('password').disabled = true;
-            document.getElementById('password').value = "";
-            location.reload()
-
+            }
         }
     }
-    
 }
 function signup(){
 
@@ -117,23 +116,24 @@ function signout(){
     Http.send();
 
     Http.onreadystatechange = (e) => {
-        var response = Http.responseText
+        if (Http.readyState === 4) {
+            var response = Http.responseText
 
-        if (response == 'Logged out'){
-            errorbox.value = "Logged out" + "\n" + errorbox.value;
-            document.getElementById("myuser").innerHTML = "No user"
-            document.getElementById('uname').disabled = false;
-            document.getElementById('password').disabled = false;
-            document.getElementById('password').value = "";
-            location.reload()
-        } else{
-            errorbox.value = "Something bad happened" + "\n" + errorbox.value;
-            
+            if (response == 'Logged out'){
+                errorbox.value = "Logged out" + "\n" + errorbox.value;
+                document.getElementById("myuser").innerHTML = "No user"
+                document.getElementById('uname').disabled = false;
+                document.getElementById('password').disabled = false;
+                document.getElementById('password').value = "";
+                location.reload()
+            } else{
+                errorbox.value = "Something bad happened" + "\n" + errorbox.value;
+                
 
+            }
         }
     }
 }
-
 
 function login(){
     if (inroom == true){

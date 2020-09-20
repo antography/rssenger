@@ -19,6 +19,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
+def getsetting(setting):
+    settingfeed = "./settings.xml"
+    tree = lxml.etree.parse(settingfeed)
+    values = tree.xpath(".//title[text()='"+ setting + "']/..")
+
+    return {
+        'value' : str(values[0][3].text)
+    }
+
 def getuser(uname):
     userfeed = "./users.xml"
     tree = lxml.etree.parse(userfeed)
@@ -42,7 +51,6 @@ def getuser(uname):
             return False
     else:
         return  False
-
 
 class User(flask_login.UserMixin):
     pass
@@ -80,7 +88,6 @@ def request_loader(request):
     return user
 
 def authenticated_only(f):
-    print("spo,etjogm ja[[emd")
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -92,8 +99,6 @@ def authenticated_only(f):
 @socketio.on('join')
 @authenticated_only
 def on_join(data):
-    #print(flask_login.current_user.id)
-    print (current_user)
     if current_user.is_authenticated:
         username = flask_login.current_user.id
         room = data['room']
@@ -129,7 +134,7 @@ def handle_message(message):
         et.SubElement(root[0], 'item')
         
         et.SubElement(root[0][-1], 'title')
-        root[0][-1][-1].text = "message"
+        root[0][-1][-1].text = msgid
         et.SubElement(root[0][-1], 'username')
         root[0][-1][-1].text = username
         et.SubElement(root[0][-1], 'description')
@@ -146,7 +151,7 @@ def handle_message(message):
         et.SubElement(root[0], 'item')
        
         et.SubElement(root[0][-1], 'title')
-        root[0][-1][-1].text = "message"
+        root[0][-1][-1].text = msgid
         et.SubElement(root[0][-1], 'username')
         root[0][-1][-1].text = username
         et.SubElement(root[0][-1], 'description')
@@ -197,16 +202,51 @@ def login():
             user.id = email
             flask_login.login_user(user)
             return 'Logged in'
-
-        return 'Bad login'
+        else:
+            return 'Bad login'
     else:
-        return 'Bad login'
-
+        return 'Unknown'
 
 @app.route('/logout')
+@authenticated_only
 def logout():
     flask_login.logout_user()
     return 'Logged out'
+
+@app.route('/signup', methods=['GET','POST'])
+def signup():
+    if not bool(getsetting("signup")['value'] == "True"):
+        return "Signup Disabled"
+
+    if flask.request.method == 'GET':
+        return render_template('signup.html')
+    passwd = flask.request.form.get('password')
+    email = flask.request.form.get('uname')
+    users = getuser(email)
+    if users:
+        return "USER ACCOUNT TAKEN"
+    if not passwd:
+        return "NO PASSWORD SUPPLIED"
+
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(passwd.encode('utf-8'), salt)
+
+    reqfeed = getsetting("userfeed")['value']
+    tree = et.parse(reqfeed)
+    root = tree.getroot()
+
+    et.SubElement(root[0], 'item')
+    
+    et.SubElement(root[0][-1], 'title')
+    root[0][-1][-1].text = email
+    et.SubElement(root[0][-1], 'author')
+    root[0][-1][-1].text = ""
+    et.SubElement(root[0][-1], 'comments')
+    root[0][-1][-1].text = hashed.decode('utf-8')
+    et.SubElement(root[0][-1], "description")
+    root[0][-1][-1].text = ""
+    tree.write(reqfeed)
+    return redirect("/")
 
 @app.route('/protected')
 @flask_login.login_required
@@ -218,4 +258,4 @@ def getusers(uname):
     return getuser(uname)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=bool(getsetting("debug")['value'] == "True"))

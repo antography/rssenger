@@ -1,0 +1,27 @@
+<rss version="2.0">
+<channel>
+  <title>rssenger settings</title>
+  <link>https://www.example.com</link>
+  <description>Thy settings hath landed into thou's aggregator</description>
+
+  <item>
+    <title>signup</title>
+    <author></author> 
+    <comments></comments>
+    <description>False</description>
+  </item>
+  <item>
+    <title>debug</title>
+    <author></author> 
+    <comments></comments>
+    <description>False</description>
+  </item>
+
+  <item>
+    <title>userfeed</title>
+    <author></author> 
+    <comments></comments>
+    <description>./users.xml</description>
+  </item>
+  </channel>
+</rss>
