@@ -11,7 +11,7 @@ RSSenger is an instant messenging webapp that uses *valid* rss feeds as the prim
 ## Installation
 1) Create a users feed by copying `template.xml` to `users.xml`
 2) Modify settings to your liking in `settings.xml`
-
+3) python3 main.py
 ### Do not delete `template.xml`. It is used for new feeds as well
 
 Tada! You're done.
