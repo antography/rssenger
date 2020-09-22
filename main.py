@@ -258,4 +258,4 @@ def getusers(uname):
     return getuser(uname)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=bool(getsetting("debug")['value'] == "True"))
+    socketio.run(app,port=6969, debug=bool(getsetting("debug")['value'] == "True"))
